@@ -11,4 +11,4 @@ ocamlrun build/lifetime
 mkdir -p build/install
 if [[ -d build/install/licensebox ]]; then OCAMLFIND_DESTDIR="$PWD/build/install" ocamlfind remove -ldconf ignore licensebox; fi
 OCAMLFIND_DESTDIR="$PWD/build/install" ocamlfind install -ldconf ignore licensebox build/META build/licensebox.cma build/licensebox.cmi build/liblicensebox_stubs.a build/dlllicensebox_stubs.so
-tar -czf build/licensebox-ocaml-0.1.0.tar.gz LICENSE src ci test licensebox.opam
+tar -czf build/licensebox-ocaml-0.2.0.tar.gz LICENSE src ci test licensebox.opam

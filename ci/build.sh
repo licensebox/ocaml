@@ -8,7 +8,7 @@ ocamlfind ocamlc -package yojson -I build -c src/licensebox.ml -o build/licenseb
 ocamlmklib -o build/licensebox_stubs build/stubs.o -L"$LICENSEBOX_LIB_DIR" -llicensebox
 ocamlc -a -o build/licensebox.cma build/licensebox.cmo -dllib -llicensebox_stubs -cclib -llicensebox_stubs -cclib -llicensebox
 cat > build/META <<'META'
-version="0.1.0"
+version="0.2.0"
 requires="yojson"
 archive(byte)="licensebox.cma"
 META
