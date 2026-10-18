@@ -1,0 +1,12 @@
+opam-version: "2.0"
+name: "licensebox"
+version: "0.1.0"
+synopsis: "Native Licensebox application licensing"
+maintainer: "Vijai Kumar <vijai@meshing.engineer>"
+authors: ["Vijai Kumar"]
+license: "MIT"
+homepage: "https://meshing.engineer"
+dev-repo: "git+https://github.com/licensebox/ocaml.git"
+depends: ["ocaml" {>= "4.14"} "ocamlfind" "yojson"]
+build: [ ["bash" "ci/build.sh"] ]
+install: [ ["ocamlfind" "install" "licensebox" "build/META" "build/licensebox.cma" "build/licensebox.cmi" "build/liblicensebox_stubs.a" "build/dlllicensebox_stubs.so"] ]
