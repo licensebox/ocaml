@@ -13,6 +13,9 @@ let run r=
  Licensebox.with_client c (fun c->match op with
  | "lease"->Licensebox.lease c|"require"->Licensebox.require c (try s "module" with _->"core")
  | "repeat"->ignore(Licensebox.require c "core");Licensebox.require c "core"
+ | "heartbeat"->Licensebox.heartbeat c (try s "module" with _->"core")
+ | "heartbeat-repeat"->ignore(Licensebox.heartbeat c "core");Licensebox.heartbeat c "core"
+ | "heartbeat-after-require"->ignore(Licensebox.require c "core");Licensebox.heartbeat c "core"
  | "status"->Licensebox.status c|"sign_in"->Licensebox.sign_in ~timeout:3. c
  | "logout"->Licensebox.logout c;`Null|"modules"->Licensebox.modules c|"requests"->Licensebox.requests c
  | "request"->Licensebox.request_access ~note:"café – test" c ["export"]|"access-link"->`String(Licensebox.access_link c)

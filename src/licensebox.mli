@@ -6,6 +6,7 @@ val create: ?version:string -> ?server:string -> ?directory:string -> ?ca_bundle
 val close:client -> unit
 val with_client:client -> (client -> 'a) -> 'a
 val lease:client -> Yojson.Safe.t
+val heartbeat:client -> string -> Yojson.Safe.t
 val require:client -> string -> Yojson.Safe.t
 val status:client -> Yojson.Safe.t
 val sign_in: ?timeout:float -> client -> Yojson.Safe.t

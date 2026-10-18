@@ -15,6 +15,7 @@ let create ?(version="") ?server ?directory ?ca_bundle ?(callbacks=default_callb
 let with_client c f=Fun.protect ~finally:(fun()->close c) (fun()->f c)
 let call c op args=Yojson.Safe.from_string(call_raw c op (`Assoc args |> Yojson.Safe.to_string))
 let lease c=call c "lease" []
+let heartbeat c module_name=call c "heartbeat" ["module",`String module_name]
 let require c name=call c "require" ["module",`String name]
 let status c=call c "status" []
 let sign_in ?(timeout=0.) c=call c "sign_in" ["timeout",`Float timeout]
