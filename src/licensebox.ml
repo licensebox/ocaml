@@ -9,9 +9,9 @@ external call_raw : client -> string -> string -> string = "lbML_call"
 external derive_raw : string -> string -> string -> string = "lbML_derive"
 external native_binding : string -> string = "lbML_native"
 external verify_raw : string -> string -> string -> float -> string = "lbML_verify"
-let create ?(version="") ?server ?directory ?ca_bundle ?(callbacks=default_callbacks) ~product ~keys () =
+let create ?(version="") ?server ?directory ?ca_bundle ?enrol_token ?(callbacks=default_callbacks) ~product ~keys () =
  let optional name = function None->[]|Some v->[name,`String v] in
- create_raw (Yojson.Safe.to_string (`Assoc (["product",`String product;"keys",`Assoc(List.map(fun(k,v)->k,`String v)keys);"version",`String version]@optional "server" server@optional "directory" directory@optional "ca_bundle" ca_bundle))) callbacks
+ create_raw (Yojson.Safe.to_string (`Assoc (["product",`String product;"keys",`Assoc(List.map(fun(k,v)->k,`String v)keys);"version",`String version]@optional "server" server@optional "directory" directory@optional "ca_bundle" ca_bundle@optional "enrol_token" enrol_token))) callbacks
 let with_client c f=Fun.protect ~finally:(fun()->close c) (fun()->f c)
 let call c op args=Yojson.Safe.from_string(call_raw c op (`Assoc args |> Yojson.Safe.to_string))
 let lease c=call c "lease" []
@@ -24,6 +24,9 @@ let modules c=call c "modules" []
 let requests c=call c "requests" []
 let request_access ?(note="") c names=call c "request" ["modules",`List(List.map(fun s->`String s)names);"note",`String note]
 let access_link c=match call c "access-link" [] with `String s->s|_->raise(Error "protocol_error")
+let enrol c token=call c "enrol" ["token",`String token]
+let checkout c m=call c "checkout" ["module",`String m]
+let checkin c ms=ignore(call c "checkin" ["modules",`List(List.map(fun m->`String m)ms)])
 let record c ~command ~success ~elapsed=ignore(call c "record" ["command",`String command;"success",`Bool success;"elapsed",`Float elapsed])
 let derive_binding ~product ~source raw=let rec trim n=if n>0&&raw.[n-1]='\000' then trim(n-1) else n in derive_raw product source (String.sub raw 0 (trim(String.length raw)))
 let verify_lease ~token ~product ~keys ~now=Yojson.Safe.from_string(verify_raw token product (Yojson.Safe.to_string(`Assoc(List.map(fun(k,v)->k,`String v)keys))) now)

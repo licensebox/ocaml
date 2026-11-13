@@ -2,7 +2,7 @@ exception Error of string
 type client
 type callbacks = {on_sign_in:(string -> string -> unit) option;clock:(unit -> float) option;machine_binding:(unit -> string) option;cancelled:(unit -> bool) option}
 val default_callbacks:callbacks
-val create: ?version:string -> ?server:string -> ?directory:string -> ?ca_bundle:string -> ?callbacks:callbacks -> product:string -> keys:(string*string) list -> unit -> client
+val create: ?version:string -> ?server:string -> ?directory:string -> ?ca_bundle:string -> ?enrol_token:string -> ?callbacks:callbacks -> product:string -> keys:(string*string) list -> unit -> client
 val close:client -> unit
 val with_client:client -> (client -> 'a) -> 'a
 val lease:client -> Yojson.Safe.t
@@ -15,6 +15,11 @@ val modules:client -> Yojson.Safe.t
 val requests:client -> Yojson.Safe.t
 val request_access: ?note:string -> client -> string list -> Yojson.Safe.t
 val access_link:client -> string
+(** Service accounts and floating copies: [require] checks a floating module out
+    by itself; [?enrol_token] (else LICENSEBOX_ENROL_TOKEN) enrols on first lease. *)
+val enrol:client -> string -> Yojson.Safe.t
+val checkout:client -> string -> Yojson.Safe.t
+val checkin:client -> string list -> unit
 val record:client -> command:string -> success:bool -> elapsed:float -> unit
 val derive_binding:product:string -> source:string -> string -> string
 val native_binding:string -> string
